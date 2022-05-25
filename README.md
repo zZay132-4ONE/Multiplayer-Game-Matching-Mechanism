@@ -18,7 +18,7 @@
 ## 1.2 知识点总结
 
 
-- Thrift 文件的编写（与 GRPC 十分类似）：
+- Thrift 文件编写（与 GRPC 十分类似）：
 
     ```thrift
     /** 设置对应语言的命名空间 */
@@ -58,6 +58,30 @@
     // 链接 .o 文件。生成可执行文件
     g++ *.o -o [FILENAME]
 
-    // 对于 thrift 文件，需要额外引入 -lthrift ，例子如下
+    // 若编译文件中包含 thrift 相关，需要利用 -lthrift 额外引入 thrift 动态库
     g++ *.o -o main -lthrift
+
+    // 若编译文件中包含多线程相关，需要利用 -pthread 额外引入多线程动态库
+    g++ *.o -o main -pthread 
+    ```
+
+- 消息队列的使用（设计操作系统知识，如互斥量、条件变量等）：
+
+    ```cpp
+    #include <queue>
+    #include <mutex>
+    #include <condition_variable>
+    
+    // Task
+    struct Task {
+        User user;
+        string type;
+    };
+
+    // Message queue
+    struct MessageQueue {
+        queue<Task> q;
+        mutex m;
+        condition_variable cv;
+    } message_queue;
     ```
