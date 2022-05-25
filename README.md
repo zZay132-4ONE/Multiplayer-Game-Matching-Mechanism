@@ -8,11 +8,11 @@
 
 ## 1.1 项目结构
 
-- `match_server`： 匹配池服务模块的服务端。（https://git.acwing.com/Zzay/thrift_lesson/-/tree/master/match_system）
+- `match_server`： 匹配池服务模块的服务端。（ https://git.acwing.com/Zzay/thrift_lesson/-/tree/master/match_system ）
 
-- `game`： 匹配池服务模块的客户端。（https://git.acwing.com/Zzay/thrift_lesson/-/tree/master/game）
+- `game`： 匹配池服务模块的客户端。（ https://git.acwing.com/Zzay/thrift_lesson/-/tree/master/game ）
 
-- `thrift`： 存放自定义的 `.thrift` 文件。（https://git.acwing.com/Zzay/thrift_lesson/-/tree/master/thrift）
+- `thrift`： 存放自定义的 `.thrift` 文件。（ https://git.acwing.com/Zzay/thrift_lesson/-/tree/master/thrift ）
 
 
 ## 1.2 知识点总结
