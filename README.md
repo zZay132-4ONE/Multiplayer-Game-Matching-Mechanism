@@ -1,10 +1,8 @@
-# Linux基础课 - Thrift项目
+# 基于 RPC 框架 Thrift 的游戏匹配机制模拟实现
 
 > - **作者：** Zzay
 >
-> - **主题：** 基于 RPC 框架 Thrift 的游戏匹配池实现
->
-> - **课程：** https://www.acwing.com/file_system/file/content/whole/index/content/2991899/
+> - **主题：** 基于 RPC 框架 Thrift 的游戏匹配机制模拟实现
 >
 > - **Gitee：** https://gitee.com/zzay0132
 >
@@ -18,9 +16,15 @@
 
 - `thrift`： 存放自定义的 `.thrift` 文件。（ https://git.acwing.com/Zzay/thrift_lesson/-/tree/master/thrift ）
 
+## 1.2 主要版本说明
 
-## 1.2 知识点总结
+- `match-server: version 3.0`： 添加匹配策略。根据玩家的积分值以及玩家之间的分差，匹配某个阈值范围内的其他玩家。
 
+- `match-server: version 4.0`： 实现多线程匹配服务器。利用 `TThreadedServer` 代替先前的 `TSimpleServer`。
+
+- `match-server: version 5.0`： 实现灵活的匹配策略。随着玩家等待时间的增加，将其能够匹配的积分阈值逐步扩大。
+
+## 1.3 知识点总结
 
 - Thrift 文件编写（与 GRPC 十分类似）：
 
