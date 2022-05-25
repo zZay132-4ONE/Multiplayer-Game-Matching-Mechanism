@@ -5,6 +5,10 @@
 > - **主题：** 基于 RPC 框架 Thrift 的游戏匹配池实现
 >
 > - **课程：** https://www.acwing.com/file_system/file/content/whole/index/content/2991899/
+>
+> - **Gitee：** https://gitee.com/zzay0132
+>
+> - **GitHub：** https://github.com/zZay132-4ONE
 
 ## 1.1 项目结构
 
