@@ -10,9 +10,9 @@
 
 ## 1.1 项目结构
 
-- `match_server`： 匹配池服务模块的服务端。（ https://git.acwing.com/Zzay/thrift_lesson/-/tree/master/match_system ）
+- `match_server`： 匹配池服务模块的服务端。（ https://git.acwing.com/Zzay/thrift_lesson/-/tree/master/match_system/src ）
 
-- `game`： 匹配池服务模块的客户端。（ https://git.acwing.com/Zzay/thrift_lesson/-/tree/master/game ）
+- `game`： 匹配池服务模块的客户端。（ https://git.acwing.com/Zzay/thrift_lesson/-/tree/master/game/src ）
 
 - `thrift`： 存放自定义的 `.thrift` 文件。（ https://git.acwing.com/Zzay/thrift_lesson/-/tree/master/thrift ）
 
@@ -92,4 +92,19 @@
         mutex m;
         condition_variable cv;
     } message_queue;
+    ```
+
+- 多线程锁的使用：
+
+    ```cpp
+    #include <mutex>
+    #include <condition_variable>
+
+    // 获取锁
+    unique_lock<mutex> lck(message_queue.m);
+    // 释放锁
+    lck.unlock();
+
+    // 告知其他等待锁的线程自己已释放锁
+    message_queue.cv.notify_all();
     ```
