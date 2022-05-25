@@ -1,8 +1,13 @@
 #include "match_server/Match.h"
+#include "save_client/Save.h"
+
 #include <thrift/protocol/TBinaryProtocol.h>
 #include <thrift/server/TSimpleServer.h>
+#include <thrift/server/TThreadedServer.h>
+#include <thrift/transport/TSocket.h>
 #include <thrift/transport/TServerSocket.h>
 #include <thrift/transport/TBufferTransports.h>
+#include <thrift/transport/TTransportUtils.h>
 
 #include <iostream>
 #include <queue>
@@ -16,7 +21,8 @@ using namespace ::apache::thrift::protocol;
 using namespace ::apache::thrift::transport;
 using namespace ::apache::thrift::server;
 
-using namespace  ::match_service;
+using namespace ::match_service;
+using namespace ::save_service;
 
 using namespace std;
 
@@ -48,12 +54,35 @@ class Pool {
 
         // Save result
         void save_result(int a, int b) {
+            const int PORT = 9090;
+            const string HOST = "123.57.47.211";
+            const string USERNAME = "acs_5646";
+            const string PASSWORD = "ca9189d9";
+            
             printf("Match Result: %d %d\n", a, b);
+            std::shared_ptr<TTransport> socket(new TSocket(HOST, PORT));
+            std::shared_ptr<TTransport> transport(new TBufferedTransport(socket));
+            std::shared_ptr<TProtocol> protocol(new TBinaryProtocol(transport));
+            SaveClient client(protocol);
+            try {
+                transport->open();
+
+                int res = client.save_data(USERNAME, PASSWORD, a, b);
+                if (!res) {
+                    puts("Success");
+                } else {
+                    puts("Failed");
+                }
+
+                transport->close();
+            } catch (TException& tx) {
+                cout << "ERROR: " << tx.what() << endl;
+            }
         }
 
         // Add a user into the pool
         void add(User user) {
-             users.push_back(user);
+            users.push_back(user);
         }
 
         // Remove a user from the pool
@@ -127,7 +156,7 @@ int main(int argc, char **argv) {
     TSimpleServer server(processor, serverTransport, transportFactory, protocolFactory);
 
     cout << "Start Match Server" << endl;
-    
+
     // Start a thread for consumers to keep matching
     thread matching_thread(consume_task);
 
