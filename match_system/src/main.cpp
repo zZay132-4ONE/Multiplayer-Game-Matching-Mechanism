@@ -15,6 +15,7 @@
 #include <thread>
 #include <mutex>
 #include <condition_variable>
+#include <unistd.h>
 
 using namespace ::apache::thrift;
 using namespace ::apache::thrift::protocol;
@@ -45,10 +46,20 @@ class Pool {
         // Match two users
         void match() {
             while (users.size() > 1) {
-                auto a = users[0], b = users[1];
-                users.erase(users.begin());
-                users.erase(users.begin());
-                save_result(a.id, b.id);
+                sort(users.begin(), users.end(), [&](User& a, User b) {
+                        return a.score < b.score;
+                        });
+                bool flag = true;
+                for (uint32_t i = 1; i < users.size(); i++) {
+                    auto a = users[i - 1], b = users[i];
+                    if (b.score - a.score <= 50) {
+                        users.erase(users.begin() + i - 1, users.begin() + i + 1);
+                        save_result(a.id, b.id);
+                        flag = false;
+                        break;
+                    }
+                }
+                if (flag) break;
             }
         }
 
@@ -128,8 +139,9 @@ void consume_task() {
         unique_lock<mutex> lck(message_queue.m);
         // If the message queue is empty, continue loop
         if (message_queue.q.empty()) {
-            message_queue.cv.wait(lck);
-            continue;
+            lck.unlock();
+            pool.match();
+            sleep(1);
         } else {
             // Execute a task popping from the message queue
             auto task = message_queue.q.front();
